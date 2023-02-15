@@ -5,7 +5,7 @@ import {
 } from "../exceptions/ReferralCodeNotFoundException";
 import Controller from "../interfaces/controller.interface";
 import validationMiddleware from "../middleware/validation.middleware";
-import CreatePostDto from "./referralCode.dto";
+import CreateReferralCodeDto from "./referralCode.dto";
 import ReferralCodeModel from "./referralCode.model";
 import ReferralCode from "./referralCode.interface";
 
@@ -25,20 +25,20 @@ class ReferralCodeController implements Controller {
       .all(`${this.path}/*`)
       .patch(
         `${this.path}/:code`,
-        validationMiddleware(CreatePostDto, true),
+        validationMiddleware(CreateReferralCodeDto, true),
         this.modifyReferralCode
       )
       .delete(`${this.path}/:code`, this.deleteReferralCode)
       .post(
         this.path,
-        validationMiddleware(CreatePostDto),
+        validationMiddleware(CreateReferralCodeDto),
         this.createReferralCode
       );
   }
 
   private getAllCodes = async (request: Request, response: Response) => {
     const referralCodes = await this.ReferralCodeModel.find();
-    response.send(referralCodes);
+    response.json(referralCodes);
   };
 
   private getReferralCodeByCode = async (
@@ -49,7 +49,7 @@ class ReferralCodeController implements Controller {
     const code = request.params.code;
     const referralCode = await this.ReferralCodeModel.findOne({ code });
     if (referralCode) {
-      response.send(referralCode);
+      response.json(referralCode);
     } else {
       next(new ReferralCodeNotFoundException(code));
     }
@@ -69,7 +69,7 @@ class ReferralCodeController implements Controller {
     );
 
     if (updatedReferralCode) {
-      response.send(updatedReferralCode);
+      response.json(updatedReferralCode);
     } else {
       next(new ReferralCodeNotFoundException(code));
     }
@@ -81,12 +81,12 @@ class ReferralCodeController implements Controller {
     next: NextFunction
   ) => {
     try {
-      const referralCodeData: CreatePostDto = request.body;
+      const referralCodeData: CreateReferralCodeDto = request.body;
       const createdReferralCode = new this.ReferralCodeModel({
         ...referralCodeData,
       });
-      const savedPost = await createdReferralCode.save();
-      response.send(savedPost);
+      const savedReferralCode = await createdReferralCode.save();
+      response.json(savedReferralCode);
     } catch (err) {
       next(new ReferralCodeCustomErrorMessage(err.message));
     }
