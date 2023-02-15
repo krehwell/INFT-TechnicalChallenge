@@ -19,15 +19,15 @@ class ReferralCodeController implements Controller {
 
   private initializeRoutes() {
     this.router.get(this.path, this.getAllCodes);
-    this.router.get(`${this.path}/:id`, this.getReferralCodeByCode);
+    this.router.get(`${this.path}/:code`, this.getReferralCodeByCode);
     this.router
       .all(`${this.path}/*`)
       // .patch(
-      //   `${this.path}/:id`,
+      //   `${this.path}/:code`,
       //   validationMiddleware(CreatePostDto, true),
       //   this.modifyPost
       // )
-      // .delete(`${this.path}/:id`, this.deletePost);
+      .delete(`${this.path}/:code`, this.deletePost)
       .post(
         this.path,
         validationMiddleware(CreatePostDto),
@@ -45,7 +45,7 @@ class ReferralCodeController implements Controller {
     response: Response,
     next: NextFunction
   ) => {
-    const code = request.params.id;
+    const code = request.params.code;
     const referralCode = await this.ReferralCodeModel.findOne({ code });
     if (referralCode) {
       response.send(referralCode);
@@ -59,15 +59,15 @@ class ReferralCodeController implements Controller {
   //   response: Response,
   //   next: NextFunction
   // ) => {
-  //   const id = request.params.id;
+  //   const code = request.params.code;
   //   const postData: Post = request.body;
-  //   const post = await this.referralCode.findByIdAndUpdate(id, postData, {
+  //   const post = await this.referralCode.findByIdAndUpdate(code, postData, {
   //     new: true,
   //   });
   //   if (post) {
   //     response.send(post);
   //   } else {
-  //     next(new RefferalCodeNotFoundException(id));
+  //     next(new RefferalCodeNotFoundException(code));
   //   }
   // };
 
@@ -88,19 +88,19 @@ class ReferralCodeController implements Controller {
     }
   };
 
-  // private deletePost = async (
-  //   request: Request,
-  //   response: Response,
-  //   next: NextFunction
-  // ) => {
-  //   const id = request.params.id;
-  //   const successResponse = await this.referralCode.findByIdAndDelete(id);
-  //   if (successResponse) {
-  //     response.send(200);
-  //   } else {
-  //     next(new RefferalCodeNotFoundException(id));
-  //   }
-  // };
+  private deletePost = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const code = request.params.code;
+    const isDeleted = await this.ReferralCodeModel.findOneAndDelete({ code });
+    if (isDeleted) {
+      response.sendStatus(204);
+    } else {
+      next(new ReferralCodeNotFoundException(code));
+    }
+  };
 }
 
 export default ReferralCodeController;
