@@ -7,6 +7,7 @@ import Controller from "../interfaces/controller.interface";
 import validationMiddleware from "../middleware/validation.middleware";
 import CreatePostDto from "./referralCode.dto";
 import ReferralCodeModel from "./referralCode.model";
+import ReferralCode from "./referralCode.interface";
 
 class ReferralCodeController implements Controller {
   public path = "/referralCode";
@@ -22,12 +23,12 @@ class ReferralCodeController implements Controller {
     this.router.get(`${this.path}/:code`, this.getReferralCodeByCode);
     this.router
       .all(`${this.path}/*`)
-      // .patch(
-      //   `${this.path}/:code`,
-      //   validationMiddleware(CreatePostDto, true),
-      //   this.modifyPost
-      // )
-      .delete(`${this.path}/:code`, this.deletePost)
+      .patch(
+        `${this.path}/:code`,
+        validationMiddleware(CreatePostDto, true),
+        this.modifyReferralCode
+      )
+      .delete(`${this.path}/:code`, this.deleteReferralCode)
       .post(
         this.path,
         validationMiddleware(CreatePostDto),
@@ -54,22 +55,25 @@ class ReferralCodeController implements Controller {
     }
   };
 
-  // private modifyPost = async (
-  //   request: Request,
-  //   response: Response,
-  //   next: NextFunction
-  // ) => {
-  //   const code = request.params.code;
-  //   const postData: Post = request.body;
-  //   const post = await this.referralCode.findByIdAndUpdate(code, postData, {
-  //     new: true,
-  //   });
-  //   if (post) {
-  //     response.send(post);
-  //   } else {
-  //     next(new RefferalCodeNotFoundException(code));
-  //   }
-  // };
+  private modifyReferralCode = async (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const code = request.params.code;
+    const referalCodeData: ReferralCode = request.body;
+    const updatedReferralCode = await this.ReferralCodeModel.findOneAndUpdate(
+      { code },
+      referalCodeData,
+      { new: true, useFindAndModify: false }
+    );
+
+    if (updatedReferralCode) {
+      response.send(updatedReferralCode);
+    } else {
+      next(new ReferralCodeNotFoundException(code));
+    }
+  };
 
   private createReferralCode = async (
     request: Request,
@@ -88,13 +92,16 @@ class ReferralCodeController implements Controller {
     }
   };
 
-  private deletePost = async (
+  private deleteReferralCode = async (
     request: Request,
     response: Response,
     next: NextFunction
   ) => {
     const code = request.params.code;
-    const isDeleted = await this.ReferralCodeModel.findOneAndDelete({ code });
+    const isDeleted = await this.ReferralCodeModel.findOneAndDelete(
+      { code },
+      { useFindAndModify: false }
+    );
     if (isDeleted) {
       response.sendStatus(204);
     } else {
