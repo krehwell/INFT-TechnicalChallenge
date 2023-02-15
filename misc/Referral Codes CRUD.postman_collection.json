@@ -1,0 +1,127 @@
+{
+	"info": {
+		"_postman_id": "8cf6c5e7-fdef-49f8-8348-91c590e4f589",
+		"name": "Referral Codes CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16151779"
+	},
+	"item": [
+		{
+			"name": "Create  a Referral",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"code\": \"240HOT\",\n  \"description\": \"a promo for lingerie\",\n  \"type\": \"SHOP\",\n  \"by\": \"Marketting Team\",\n  \"created\": 1676443273\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/referralCode",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"referralCode"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Referral by Code",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/referralCode/Cka880",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"referralCode",
+						"Cka880"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Referrals",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/referralCode/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"referralCode",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Referral Code",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/referralCode/Cka880",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"referralCode",
+						"Cka880"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a Referral",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"69STLO\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/referralCode/Cka69240",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"referralCode",
+						"Cka69240"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

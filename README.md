@@ -35,3 +35,8 @@ yarn install
 ```bash
 yarn dev
 ```
+
+For API testing, you can load the Postman json script in "./misc/Referral Codes CRUD.postman_collection.json" and test it
+using Postman. The script should include all the CRUD operation template.
+
+API path should follows:
